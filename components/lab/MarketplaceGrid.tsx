@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, Filter } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { DatasetCard } from "./DatasetCard";
 import type { DatasetCard as DatasetCardType } from "@/lib/types";
 
@@ -76,16 +77,43 @@ export function MarketplaceGrid({ datasets }: { datasets: DatasetCardType[] }) {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((d) => (
-          <DatasetCard key={d.id} dataset={d} />
-        ))}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+        }}
+      >
+        <AnimatePresence mode="popLayout">
+          {filtered.map((d) => (
+            <motion.div
+              key={d.id}
+              layout
+              variants={{
+                hidden: { opacity: 0, y: 12 },
+                show: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                },
+              }}
+              initial="hidden"
+              animate="show"
+              exit={{ opacity: 0, y: -8, transition: { duration: 0.2 } }}
+            >
+              <DatasetCard dataset={d} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
         {filtered.length === 0 && (
           <div className="md:col-span-2 lg:col-span-3 card p-10 text-center text-sm text-[color:var(--color-text-muted)]">
             No datasets match those filters.
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

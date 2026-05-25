@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, Boxes, Cpu, Hand, Database } from "lucide-react";
 import { PERSONA_ORDER, PERSONAS } from "@/lib/personas";
+import { FadeIn, Stagger, StaggerItem } from "@/components/ui/FadeIn";
 
 export default function Landing() {
   return (
     <div className="bg-grid">
       <section className="mx-auto max-w-[1400px] px-6 pt-20 pb-16">
         <div className="grid grid-cols-12 gap-10 items-start">
-          <div className="col-span-12 lg:col-span-7">
+          <FadeIn className="col-span-12 lg:col-span-7" delay={0.05}>
             <div className="tag tag-accent mb-6">Praxis Robotics — investor demo</div>
             <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-[1.04]">
               Every workplace,
@@ -42,9 +43,9 @@ export default function Landing() {
               <Metric label="Quality (1st contract)" value="86%" />
               <Metric label="Gross margin" value="65%" />
             </div>
-          </div>
+          </FadeIn>
 
-          <div className="col-span-12 lg:col-span-5">
+          <FadeIn className="col-span-12 lg:col-span-5" delay={0.18}>
             <div className="card overflow-hidden">
               <div className="aspect-video bg-black relative">
                 <video
@@ -80,37 +81,47 @@ export default function Landing() {
                 <SpecCell label="VLA-ready" value="✓ triplet" />
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <PillarCard
-            icon={<Boxes className="h-5 w-5" />}
-            tag="01 · Capture"
-            title="Factory uploads"
-            body="Anonymized operators wear ZED2i head cams + dual-wrist cams + finger-joint sensors. Multi-modal episodes upload directly from the floor."
-            href="/factory"
-            cta="Enter Factory"
-          />
-          <PillarCard
-            icon={<Cpu className="h-5 w-5" />}
-            tag="02 · Process"
-            title="Praxis Ops"
-            body="Streams sync, hand skeletons extract, sub-tasks segment, human QA validates. (video, trajectory, instruction) triplets released to subscribed labs."
-            href="/ops"
-            cta="Enter Ops"
-          />
-          <PillarCard
-            icon={<Hand className="h-5 w-5" />}
-            tag="03 · Sell"
-            title="Robotics Lab"
-            body="Frontier labs browse the marketplace, preview multi-view episodes with hand-pose overlays, license VLA triplets by the captured hour."
-            href="/lab"
-            cta="Enter Lab"
-          />
-        </div>
+        <Stagger
+          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4"
+          stagger={0.08}
+          delay={0.25}
+        >
+          <StaggerItem>
+            <PillarCard
+              icon={<Boxes className="h-5 w-5" />}
+              tag="01 · Capture"
+              title="Factory uploads"
+              body="Anonymized operators wear ZED2i head cams + dual-wrist cams + finger-joint sensors. Multi-modal episodes upload directly from the floor."
+              href="/factory"
+              cta="Enter Factory"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PillarCard
+              icon={<Cpu className="h-5 w-5" />}
+              tag="02 · Process"
+              title="Praxis Ops"
+              body="Streams sync, hand skeletons extract, sub-tasks segment, human QA validates. (video, trajectory, instruction) triplets released to subscribed labs."
+              href="/ops"
+              cta="Enter Ops"
+            />
+          </StaggerItem>
+          <StaggerItem>
+            <PillarCard
+              icon={<Hand className="h-5 w-5" />}
+              tag="03 · Sell"
+              title="Robotics Lab"
+              body="Frontier labs browse the marketplace, preview multi-view episodes with hand-pose overlays, license VLA triplets by the captured hour."
+              href="/lab"
+              cta="Enter Lab"
+            />
+          </StaggerItem>
+        </Stagger>
 
-        <div className="mt-16 card p-6">
+        <FadeIn className="mt-16 card p-6" delay={0.45}>
           <div className="flex items-start gap-3">
             <Database className="h-5 w-5 text-[color:var(--color-accent)] mt-0.5" />
             <div>
@@ -129,7 +140,7 @@ export default function Landing() {
               </div>
             </div>
           </div>
-        </div>
+        </FadeIn>
       </section>
     </div>
   );
