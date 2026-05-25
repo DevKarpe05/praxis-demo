@@ -1,0 +1,25 @@
+{
+  "episodeId": "1778589627389",
+  "task": "tidy stove",
+  "sceneCategory": "home",
+  "coordinateFrame": "RH_FLU",
+  "fps": 30,
+  "slice": {
+    "startSec": 488.0,
+    "durationSec": 30.0,
+    "frameCount": 900
+  },
+  "fullEpisode": {
+    "durationSec": 663.53,
+    "frameCount": 19905,
+    "subtaskCount": 20
+  },
+  "videos": {
+    "head": "/samples/episodes/1778589627389/head.mp4",
+    "wristLeft": "/samples/episodes/1778589627389/wrist_left.mp4",
+    "wristRight": "/samples/episodes/1778589627389/wrist_right.mp4"
+  },
+  "intrinsics": "/samples/episodes/1778589627389/camera.json",
+  "tracks": "/data/episodes/1778589627389/tracks.json",
+  "subtasks": "/data/episodes/1778589627389/subtasks.json"
+}

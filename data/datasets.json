@@ -16,20 +16,36 @@
     "description": "142 multi-modal home episodes captured across 6 residential environments. Preview clip is a 30 s slice of episode 1778330002413 — an operator opens a shoe-cabinet drawer, repositions four pairs of shoes by colour, and wipes the cabinet. 28 sub-tasks · ZED2i head + dual wrist + 40 finger joints + end-effector pose."
   },
   {
-    "id": "ds_home_organize_drawer_release_pending",
-    "title": "Home · Organize drawer (E2)",
-    "task": "organize drawer",
+    "id": "ds_home_tidy_stove",
+    "title": "Home · Tidy stove",
+    "task": "tidy stove",
     "sceneCategory": "home",
-    "scene": "Residential bedroom · drawer organization",
+    "scene": "Residential kitchen · stove, stacked cookware, rag",
     "hours": 18,
     "episodes": 96,
     "sensors": ["zed2i", "wrist_l", "wrist_r", "finger_joints", "end_effector", "depth_svo2"],
     "qualityScore": 4.8,
-    "pricePerHour": 22,
+    "pricePerHour": 18,
     "format": "premium",
-    "previewVideo": "/samples/episodes/1778330002413/head.mp4",
+    "previewVideo": "/samples/episodes/1778589627389/head.mp4",
     "episodeId": "1778589627389",
-    "description": "Second premium-format collection. Each episode includes the full ZED2i SVO2 (RGB + depth + point cloud) alongside the standard bundle. Drawer-and-bin organization tasks across 4 bedroom layouts."
+    "description": "Premium kitchen-tidy collection. The 30 s preview is sliced from 488–518 s of episode 1778589627389 where the operator wipes a plate, reorganizes stacked bowls and plates, and clears the cutting-board area. 20 sub-tasks across the full 663 s capture · ZED2i head (incl. SVO2 depth) + dual wrist + 40 finger joints + end-effector trajectories."
+  },
+  {
+    "id": "ds_home_organize_bedroom",
+    "title": "Home · Organize bedroom",
+    "task": "organize bedroom",
+    "sceneCategory": "home",
+    "scene": "Residential bedroom · bed, pillows, hangers, folded laundry",
+    "hours": 14,
+    "episodes": 78,
+    "sensors": ["zed2i", "wrist_l", "wrist_r", "finger_joints", "end_effector"],
+    "qualityScore": 4.6,
+    "pricePerHour": 18,
+    "format": "premium",
+    "previewVideo": "/samples/episodes/1778594251042/wrist_left.mp4",
+    "episodeId": "1778594251042",
+    "description": "Bedroom-organization episodes covering pillowcases, hangers, and folded laundry. The 30 s preview is sliced from 263–293 s of episode 1778594251042 where the operator removes a short-sleeve shirt and a long-sleeve shirt from hangers and arranges them on the bed. 23 sub-tasks across the full 488 s capture · ZED2i head + dual wrist + 40 finger joints + end-effector trajectories."
   },
   {
     "id": "ds_factory_024_packaging",

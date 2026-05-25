@@ -76,6 +76,27 @@ export async function loadEpisodeMeta(episodeId: string): Promise<EpisodeMeta> {
   return JSON.parse(await fs.readFile(file, "utf-8"));
 }
 
+export async function listEpisodeIds(): Promise<string[]> {
+  const dir = path.join(ROOT, "data", "episodes");
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    return entries
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+      .sort();
+  } catch {
+    return [];
+  }
+}
+
+export async function loadAllEpisodeMetas(): Promise<EpisodeMeta[]> {
+  const ids = await listEpisodeIds();
+  const metas = await Promise.all(
+    ids.map((id) => loadEpisodeMeta(id).catch(() => null)),
+  );
+  return metas.filter((m): m is EpisodeMeta => m !== null);
+}
+
 export async function loadEpisodeTracks(episodeId: string): Promise<TracksData> {
   const file = path.join(ROOT, "data", "episodes", episodeId, "tracks.json");
   return JSON.parse(await fs.readFile(file, "utf-8"));

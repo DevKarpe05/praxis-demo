@@ -1,0 +1,25 @@
+{
+  "episodeId": "1778594251042",
+  "task": "organize bedroom",
+  "sceneCategory": "home",
+  "coordinateFrame": "RH_FLU",
+  "fps": 30,
+  "slice": {
+    "startSec": 263.0,
+    "durationSec": 30.0,
+    "frameCount": 900
+  },
+  "fullEpisode": {
+    "durationSec": 488.019,
+    "frameCount": 14641,
+    "subtaskCount": 23
+  },
+  "videos": {
+    "head": "/samples/episodes/1778594251042/head.mp4",
+    "wristLeft": "/samples/episodes/1778594251042/wrist_left.mp4",
+    "wristRight": "/samples/episodes/1778594251042/wrist_right.mp4"
+  },
+  "intrinsics": "/samples/episodes/1778594251042/camera.json",
+  "tracks": "/data/episodes/1778594251042/tracks.json",
+  "subtasks": "/data/episodes/1778594251042/subtasks.json"
+}

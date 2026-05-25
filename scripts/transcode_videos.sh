@@ -15,6 +15,10 @@ transcode() {
   local dst="$2"
   local scale="$3"
   local crf="$4"
+  if [ ! -f "$src" ]; then
+    echo "[skip] missing source: $(basename "$src")"
+    return 0
+  fi
   echo "[transcode] $(basename "$src") -> $dst"
   ffmpeg -y -loglevel error -ss "$START_SEC" -i "$src" -t "$DURATION_SEC" \
     -vf "scale=${scale}:flags=lanczos" \

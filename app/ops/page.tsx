@@ -2,7 +2,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Stat } from "@/components/ui/Stat";
 import { PipelineKanban, type KanbanColumn } from "@/components/ops/PipelineKanban";
 import { ThroughputChart } from "@/components/ops/ThroughputChart";
-import { EPISODE_ID, loadEpisodeMeta } from "@/lib/data";
+import { loadAllEpisodeMetas } from "@/lib/data";
 
 const SIBLING_TASKS = [
   { task: "organize drawer", operatorId: "operator_002", durationSec: 740 },
@@ -13,8 +13,11 @@ const SIBLING_TASKS = [
   { task: "open shoe cabinet drawer", operatorId: "operator_004", durationSec: 254 },
 ];
 
+const QA_OPERATORS = ["operator_001", "operator_002", "operator_003", "operator_004"];
+
 export default async function OpsDashboard() {
-  const meta = await loadEpisodeMeta(EPISODE_ID);
+  const metas = await loadAllEpisodeMetas();
+  const featuredTask = metas[0]?.task ?? "tidy shoe cabinet";
 
   const columns: KanbanColumn[] = [
     {
@@ -44,13 +47,13 @@ export default async function OpsDashboard() {
       description: "human in the loop",
       accent: true,
       cards: [
-        {
-          episodeId: meta.episodeId,
-          task: meta.task,
-          operatorId: "operator_001",
+        ...metas.map((m, i) => ({
+          episodeId: m.episodeId,
+          task: m.task,
+          operatorId: QA_OPERATORS[i % QA_OPERATORS.length],
           factoryId: "factory_024",
-          durationSec: meta.fullEpisode.durationSec,
-        },
+          durationSec: m.fullEpisode.durationSec,
+        })),
         sibling("qa_1", 4),
       ],
     },
@@ -83,7 +86,7 @@ export default async function OpsDashboard() {
 
       <ThroughputChart />
 
-      <SectionHeader eyebrow="kanban" title="Episodes in flight" subtitle={`Click the highlighted QA card "${meta.task}" to open the multi-modal reviewer.`} />
+      <SectionHeader eyebrow="kanban" title="Episodes in flight" subtitle={`Click any highlighted QA card (e.g. "${featuredTask}") to open the multi-modal reviewer.`} />
       <PipelineKanban columns={columns} />
     </div>
   );

@@ -1,0 +1,32 @@
+[
+  {
+    "start": 0.009999999999990905,
+    "end": 0.4440000000000168,
+    "label": "hang hanger back original position"
+  },
+  {
+    "start": 0.47699999999997544,
+    "end": 5.276999999999987,
+    "label": "take front hanger with blue short sleeve on clothes pole left of bed"
+  },
+  {
+    "start": 5.310999999999979,
+    "end": 14.61099999999999,
+    "label": "take blue short sleeve off hanger and put it on yellow pillowcase right of upright black pillow at bed front"
+  },
+  {
+    "start": 14.644000000000005,
+    "end": 20.711000000000013,
+    "label": "hang hanger back original place on clothes pole"
+  },
+  {
+    "start": 20.745000000000005,
+    "end": 26.444999999999993,
+    "label": "take hanger with black long sleeve on clothes pole left of bed"
+  },
+  {
+    "start": 26.47800000000001,
+    "end": 29.97800000000001,
+    "label": "take black long sleeve off hanger and put it on upright grey pillow at bed front"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "start": 0.02199999999999136,
+    "end": 4.7549999999999955,
+    "label": "wipe the big plate on the stove with a rag and put it to the front left of the small plate"
+  },
+  {
+    "start": 4.788999999999987,
+    "end": 9.088999999999999,
+    "label": "put the rag in front of the stacked small bowls"
+  },
+  {
+    "start": 9.122000000000014,
+    "end": 17.288999999999987,
+    "label": "move the small plate onto the big plate"
+  },
+  {
+    "start": 17.32299999999998,
+    "end": 24.789999999999964,
+    "label": "move the top big bowl of stacked big bowls onto the stacked plates"
+  },
+  {
+    "start": 24.82299999999998,
+    "end": 29.99000000000001,
+    "label": "move the big bowl in front of the cutting board onto the big bowl at the front of the stove"
+  }
+]

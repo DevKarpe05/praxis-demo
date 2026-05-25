@@ -1,0 +1,65 @@
+{
+  "zedParams": {
+    "cameraModel": "ZED2i",
+    "cameraSerialNumber": "31987049",
+    "cameraFirmware": "1523-778",
+    "versionZED": "[SDK]: 5.2.3 [Plugin]: 5.2.0",
+    "engineFPS": "-",
+    "cameraFPS": "-",
+    "HMDDevice": "-",
+    "trackingState": "-",
+    "objectDetectionFPS": "-",
+    "bodyTrackingFPS": "-"
+  },
+  "cameraParams": {
+    "leftIntrinsics": {
+      "name": "ZED_Left_Intrinsics",
+      "fx": 534.32,
+      "fy": 534.2,
+      "cx": 642.15,
+      "cy": 372.8995,
+      "width": 1280,
+      "height": 720
+    },
+    "rightIntrinsics": {
+      "name": "ZED_Right_Intrinsics",
+      "fx": 532.765,
+      "fy": 532.69,
+      "cx": 631.125,
+      "cy": 350.8865,
+      "width": 1280,
+      "height": 720
+    },
+    "leftDistortion": {
+      "name": "ZED_Left_Distortion",
+      "k1": -1.3891799449920654,
+      "k2": 2.5919198989868164,
+      "p1": 0.0003214630123693496,
+      "p2": -0.0005310049746185541,
+      "k3": 0.07993990182876587,
+      "k4": -1.2999399900436401,
+      "k5": 2.443310022354126,
+      "k6": 0.24122300744056702
+    },
+    "rightDistortion": {
+      "name": "ZED_Right_Distortion",
+      "k1": -1.4574099779129028,
+      "k2": 2.705590009689331,
+      "p1": 0.00030341101228259504,
+      "p2": -0.0003011439985129982,
+      "k3": 0.12217099964618683,
+      "k4": -1.3668400049209595,
+      "k5": 2.5490798950195312,
+      "k6": 0.29294100403785706
+    },
+    "stereoExtrinsics": {
+      "name": "ZED_Stereo_Baseline",
+      "tx": 0.119877413,
+      "ty": -3.35734e-05,
+      "tz": 0.000312546035,
+      "rx": -0.0016197029,
+      "ry": 0.002311167,
+      "rz": 5.75224258e-05
+    }
+  }
+}
