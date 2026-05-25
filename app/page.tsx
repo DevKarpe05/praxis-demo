@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, Boxes, Cpu, Hand } from "lucide-react";
-import { PERSONA_ORDER, PERSONAS, type PersonaId } from "@/lib/personas";
-import { FadeIn, Stagger, StaggerItem } from "@/components/ui/FadeIn";
-import { LastVisitedTag } from "@/components/LastVisitedTag";
+import { ArrowRight } from "lucide-react";
+import { PERSONA_ORDER, PERSONAS } from "@/lib/personas";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 export default function Landing() {
   return (
@@ -14,11 +13,13 @@ export default function Landing() {
               Every workplace,
               <br />a robotics data vendor.
             </h1>
-            <p className="mt-6 text-lg text-[color:var(--color-text-muted)] max-w-2xl leading-relaxed">
-              Praxis manufactures multi-modal capture hardware, deploys it
-              into factories and homes, and turns the resulting egocentric
-              video, hand pose, and end-effector trajectories into VLA
-              training data for frontier robotics labs.
+            <p className="mt-6 text-lg md:text-xl text-[color:var(--color-text)] max-w-2xl leading-relaxed">
+              Praxis enables every business to monetize its operational data.
+            </p>
+            <p className="mt-3 text-base text-[color:var(--color-text-muted)] max-w-2xl leading-relaxed">
+              We deploy capture, sensing, and data infrastructure across
+              real-world environments: transforming everyday workflows into
+              structured training data for AI systems.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-2">
               {PERSONA_ORDER.map((id) => {
@@ -77,46 +78,6 @@ export default function Landing() {
             </div>
           </FadeIn>
         </div>
-
-        <Stagger
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4"
-          stagger={0.08}
-          delay={0.25}
-        >
-          <StaggerItem>
-            <PillarCard
-              persona="factory"
-              icon={<Boxes className="h-5 w-5" />}
-              tag="01 · Capture"
-              title="Factory uploads"
-              body="Anonymized operators wear ZED2i head cams + dual-wrist cams + finger-joint sensors. Multi-modal episodes upload directly from the floor."
-              href="/factory"
-              cta="Enter Factory"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PillarCard
-              persona="ops"
-              icon={<Cpu className="h-5 w-5" />}
-              tag="02 · Process"
-              title="Praxis Ops"
-              body="Streams sync, hand skeletons extract, sub-tasks segment, human QA validates. (video, trajectory, instruction) triplets released to subscribed labs."
-              href="/ops"
-              cta="Enter Ops"
-            />
-          </StaggerItem>
-          <StaggerItem>
-            <PillarCard
-              persona="lab"
-              icon={<Hand className="h-5 w-5" />}
-              tag="03 · Sell"
-              title="Robotics Lab"
-              body="Frontier labs browse the marketplace, preview multi-view episodes with hand-pose overlays, license VLA triplets by the captured hour."
-              href="/lab"
-              cta="Enter Lab"
-            />
-          </StaggerItem>
-        </Stagger>
       </section>
     </div>
   );
@@ -132,45 +93,5 @@ function SpecCell({ label, value }: { label: string; value: string }) {
         {value}
       </div>
     </div>
-  );
-}
-
-function PillarCard({
-  persona,
-  icon,
-  tag,
-  title,
-  body,
-  href,
-  cta,
-}: {
-  persona: PersonaId;
-  icon: React.ReactNode;
-  tag: string;
-  title: string;
-  body: string;
-  href: string;
-  cta: string;
-}) {
-  return (
-    <Link href={href} className="card p-5 card-hover block group relative">
-      <div className="absolute top-3 right-3">
-        <LastVisitedTag persona={persona} />
-      </div>
-      <div className="flex items-center gap-2 text-[color:var(--color-accent)]">
-        {icon}
-        <span className="text-[11px] tracking-[0.18em] uppercase font-medium">
-          {tag}
-        </span>
-      </div>
-      <h3 className="mt-4 text-xl font-semibold tracking-tight">{title}</h3>
-      <p className="mt-2 text-sm text-[color:var(--color-text-muted)] leading-relaxed">
-        {body}
-      </p>
-      <div className="mt-4 flex items-center text-xs text-[color:var(--color-accent)] opacity-70 group-hover:opacity-100 transition-opacity">
-        {cta}
-        <ArrowRight className="ml-1.5 h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-      </div>
-    </Link>
   );
 }
