@@ -15,18 +15,38 @@ import {
 } from "lucide-react";
 import {
   PIPELINE_STAGES,
-  type PipelineProgress,
+  PIPELINE_TOTAL_SEC,
   type PipelineStage,
+  type PipelineStatus,
 } from "@/lib/pipeline";
 
-interface JobResponse {
-  job: { jobId: string; startedAt: number; filename: string; sizeBytes: number };
-  progress: PipelineProgress;
+interface UploadResponse {
+  jobId: string;
+  startedAtMillis: number;
+  totalDurationSec: number;
+  episodeId: string;
+  datasetId: string;
+  stages: PipelineStage[];
+}
+
+interface JobPollResponse {
+  jobId: string;
+  status: PipelineStatus;
+  currentStage: string;
+  stageIndex: number;
+  stageProgress: number;
+  elapsed: number;
+  totalDuration: number;
   stages: PipelineStage[];
 }
 
 const DEFAULT_INSTRUCTION = "tidy shoe cabinet";
 const DEFAULT_DATASET_ID = "ds_home_tidy_shoe_cabinet";
+const DEFAULT_FILENAME = "episode_1778330002413_bundle.zip";
+const DEFAULT_SIZE_BYTES = 92_847_201;
+
+const POLL_INTERVAL_MS = 350;
+const MAX_TRANSIENT_RETRIES = 5;
 
 export interface PipelineSimulatorProps {
   /**
@@ -35,70 +55,99 @@ export interface PipelineSimulatorProps {
    */
   instruction?: string;
   /**
-   * Marketplace dataset id the released triplet deep-links to.
+   * Marketplace dataset id the released triplet deep-links to. May be
+   * overridden by the value returned from POST /api/upload.
    */
   datasetId?: string;
 }
 
 export function PipelineSimulator({
   instruction = DEFAULT_INSTRUCTION,
-  datasetId = DEFAULT_DATASET_ID,
+  datasetId: datasetIdProp = DEFAULT_DATASET_ID,
 }: PipelineSimulatorProps = {}) {
-  const [jobId, setJobId] = useState<string | null>(null);
-  const [job, setJob] = useState<JobResponse | null>(null);
+  const [upload, setUpload] = useState<UploadResponse | null>(null);
+  const [poll, setPoll] = useState<JobPollResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const pollRef = useRef<number | null>(null);
+  const pollTimerRef = useRef<number | null>(null);
+
+  const datasetId = upload?.datasetId ?? datasetIdProp;
+  const jobId = upload?.jobId ?? null;
 
   const startUpload = useCallback(async () => {
     setError(null);
-    setJob(null);
+    setPoll(null);
+    setUpload(null);
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          filename: "episode_1778330002413_bundle.zip",
-          sizeBytes: 92_847_201,
-        }),
+        body: JSON.stringify({}),
       });
-      const data = await res.json();
-      setJobId(data.jobId);
-    } catch {
-      setError("Failed to start upload");
+      if (!res.ok) throw new Error(`upload status ${res.status}`);
+      const data: UploadResponse = await res.json();
+      setUpload(data);
+    } catch (e) {
+      setError(`Failed to start upload: ${String(e)}`);
     }
   }, []);
 
   useEffect(() => {
     if (!jobId) return;
     let cancelled = false;
+    let transientRetries = 0;
+
     const tick = async () => {
       try {
         const res = await fetch(`/api/jobs/${jobId}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`status ${res.status}`);
-        const data: JobResponse = await res.json();
+        const data: JobPollResponse = await res.json();
         if (cancelled) return;
-        setJob(data);
-        if (!data.progress.done) {
-          pollRef.current = window.setTimeout(tick, 220);
+        transientRetries = 0;
+        setPoll(data);
+        if (data.status !== "complete") {
+          pollTimerRef.current = window.setTimeout(tick, POLL_INTERVAL_MS);
         }
       } catch (e) {
-        if (!cancelled) setError(String(e));
+        if (cancelled) return;
+        if (transientRetries < MAX_TRANSIENT_RETRIES) {
+          transientRetries += 1;
+          // Exponential-ish backoff: 300, 600, 900, 1200, 1500 ms.
+          const backoff = 300 * transientRetries;
+          pollTimerRef.current = window.setTimeout(tick, backoff);
+          return;
+        }
+        setError(`Polling failed after retries: ${String(e)}`);
       }
     };
+
     tick();
     return () => {
       cancelled = true;
-      if (pollRef.current) clearTimeout(pollRef.current);
+      if (pollTimerRef.current) {
+        clearTimeout(pollTimerRef.current);
+        pollTimerRef.current = null;
+      }
     };
   }, [jobId]);
 
-  const stages = job?.stages ?? PIPELINE_STAGES;
-  const progress = job?.progress;
-  const totalBytes = job?.job.sizeBytes ?? 92_847_201;
+  const stages = poll?.stages ?? upload?.stages ?? PIPELINE_STAGES;
+  const stageIndex = poll?.stageIndex ?? -1;
+  const stageProgress = poll?.stageProgress ?? 0;
+  const isComplete = poll?.status === "complete";
+  const totalBytes = DEFAULT_SIZE_BYTES;
+  const filename = DEFAULT_FILENAME;
+  const totalDurationSec = upload?.totalDurationSec ?? PIPELINE_TOTAL_SEC;
 
   return (
     <div className="space-y-5">
-      <Dropzone onSubmit={startUpload} active={!!jobId} job={job} />
+      <Dropzone
+        onSubmit={startUpload}
+        active={!!jobId}
+        complete={isComplete}
+        filename={filename}
+        sizeBytes={totalBytes}
+        totalDurationSec={totalDurationSec}
+      />
 
       <AnimatePresence>
         {jobId && (
@@ -114,7 +163,7 @@ export function PipelineSimulator({
                 </div>
                 <div className="mt-1 mono text-xs">{jobId}</div>
               </div>
-              {progress?.released ? (
+              {isComplete ? (
                 <span className="tag border-emerald-500/30 bg-emerald-500/10 text-emerald-300 uppercase">
                   released
                 </span>
@@ -131,9 +180,9 @@ export function PipelineSimulator({
                   key={s.id}
                   stage={s}
                   index={i}
-                  current={progress?.currentStageIndex ?? -1}
-                  stageProgress={progress?.currentStageProgress ?? 0}
-                  done={progress?.done ?? false}
+                  current={stageIndex}
+                  stageProgress={stageProgress}
+                  done={isComplete}
                   totalBytes={totalBytes}
                   instruction={instruction}
                 />
@@ -141,7 +190,7 @@ export function PipelineSimulator({
             </div>
 
             <AnimatePresence>
-              {progress?.released && (
+              {isComplete && (
                 <ReleaseCard datasetId={datasetId} instruction={instruction} />
               )}
             </AnimatePresence>
@@ -150,7 +199,7 @@ export function PipelineSimulator({
       </AnimatePresence>
 
       <AnimatePresence>
-        {progress?.released && (
+        {isComplete && (
           <FlyToMarketplaceToast
             datasetId={datasetId}
             instruction={instruction}
@@ -170,14 +219,19 @@ export function PipelineSimulator({
 function Dropzone({
   onSubmit,
   active,
-  job,
+  complete,
+  filename,
+  sizeBytes,
+  totalDurationSec,
 }: {
   onSubmit: () => void;
   active: boolean;
-  job: JobResponse | null;
+  complete: boolean;
+  filename: string;
+  sizeBytes: number;
+  totalDurationSec: number;
 }) {
-  const filename = job?.job.filename ?? "episode_1778330002413_bundle.zip";
-  const sizeMB = (job?.job.sizeBytes ?? 92_847_201) / 1024 / 1024;
+  const sizeMB = sizeBytes / 1024 / 1024;
 
   return (
     <div className="card p-6 border-dashed">
@@ -188,15 +242,15 @@ function Dropzone({
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium">{filename}</div>
           <div className="text-xs text-[color:var(--color-text-muted)] mono">
-            {sizeMB.toFixed(1)} MB · ZED2i head + L/R wrist + HDF5 + camera.json
+            {sizeMB.toFixed(1)} MB · ZED2i head + L/R wrist + HDF5 + camera.json · ~{totalDurationSec}s pipeline
           </div>
         </div>
         <button
           onClick={onSubmit}
-          disabled={active && !job?.progress.released}
+          disabled={active && !complete}
           className="btn btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {active ? "Processing…" : "Start upload"}
+          {active && !complete ? "Processing…" : complete ? "Re-upload" : "Start upload"}
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>

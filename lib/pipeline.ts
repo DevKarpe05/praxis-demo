@@ -50,42 +50,57 @@ export const PIPELINE_TOTAL_SEC = PIPELINE_STAGES.reduce(
   0,
 );
 
-export interface PipelineProgress {
-  jobId: string;
-  elapsedSec: number;
-  currentStageIndex: number;
-  currentStageProgress: number;
-  done: boolean;
-  released: boolean;
+export const PIPELINE_TOTAL_MS = PIPELINE_TOTAL_SEC * 1000;
+
+export type PipelineStatus = "running" | "complete";
+
+export interface PipelineStageState {
+  status: PipelineStatus;
+  currentStage: string;
+  stageIndex: number;
+  /** 0..1 within the current stage */
+  stageProgress: number;
+  /** elapsed since job started, milliseconds */
+  elapsed: number;
+  /** total pipeline duration in milliseconds */
+  totalDuration: number;
 }
 
-export function computeProgress(
-  jobId: string,
-  startedAt: number,
-  now: number,
-): PipelineProgress {
-  const elapsed = Math.max(0, (now - startedAt) / 1000);
-  let acc = 0;
+/**
+ * Compute the current stage state purely from elapsed time. Stateless and
+ * deterministic — safe for serverless cold-starts.
+ *
+ * Once `elapsed >= totalDuration`, returns the final stage at 100% with
+ * `status: "complete"` forever (never wedges, never 404s).
+ */
+export function computeStageState(elapsedMs: number): PipelineStageState {
+  const elapsed = Math.max(0, elapsedMs);
+  const totalDuration = PIPELINE_TOTAL_MS;
+
+  let accMs = 0;
   for (let i = 0; i < PIPELINE_STAGES.length; i++) {
     const s = PIPELINE_STAGES[i];
-    if (elapsed < acc + s.durationSec) {
+    const stageMs = s.durationSec * 1000;
+    if (elapsed < accMs + stageMs) {
       return {
-        jobId,
-        elapsedSec: elapsed,
-        currentStageIndex: i,
-        currentStageProgress: (elapsed - acc) / s.durationSec,
-        done: false,
-        released: false,
+        status: "running",
+        currentStage: s.id,
+        stageIndex: i,
+        stageProgress: (elapsed - accMs) / stageMs,
+        elapsed,
+        totalDuration,
       };
     }
-    acc += s.durationSec;
+    accMs += stageMs;
   }
+
+  const last = PIPELINE_STAGES[PIPELINE_STAGES.length - 1];
   return {
-    jobId,
-    elapsedSec: elapsed,
-    currentStageIndex: PIPELINE_STAGES.length - 1,
-    currentStageProgress: 1,
-    done: true,
-    released: true,
+    status: "complete",
+    currentStage: last.id,
+    stageIndex: PIPELINE_STAGES.length - 1,
+    stageProgress: 1,
+    elapsed,
+    totalDuration,
   };
 }
