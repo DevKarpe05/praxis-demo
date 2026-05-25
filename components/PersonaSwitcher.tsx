@@ -7,9 +7,16 @@ import { PERSONA_ORDER, PERSONAS, personaFromPath } from "@/lib/personas";
 import { rememberLastPersona } from "@/lib/persona-memory";
 
 export function PersonaSwitcher() {
+  // `active` is derived PURELY from the current URL via usePathname().
+  // Do not read localStorage, custom events, or any other side-store here —
+  // those would let unrelated UI (e.g. a marketplace toast on /factory/upload)
+  // visibly flip the active persona pill while the user is still on /factory/*.
   const pathname = usePathname() ?? "/";
   const active = personaFromPath(pathname);
 
+  // Side-write the last-visited persona to localStorage so the landing page's
+  // LastVisitedTag can render a subtle hint. This runs only when the URL-derived
+  // `active` changes — never in response to upload completion or other events.
   useEffect(() => {
     if (active) rememberLastPersona(active);
   }, [active]);

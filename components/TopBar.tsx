@@ -6,7 +6,12 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-40 h-14 border-b border-[color:var(--color-border)] bg-[color:var(--color-bg)]/85 backdrop-blur supports-[backdrop-filter]:bg-[color:var(--color-bg)]/70">
       <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-3">
+        <Link
+          href="/"
+          title="Back to home"
+          aria-label="Praxis · back to home"
+          className="group flex items-center gap-3 rounded-md -mx-1 px-1 py-0.5 cursor-pointer transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[color:var(--color-accent)]/60"
+        >
           <Logo />
         </Link>
         <PersonaSwitcher />
