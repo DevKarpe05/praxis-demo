@@ -46,20 +46,5 @@
     "previewVideo": "/samples/episodes/1778594251042/wrist_left.mp4",
     "episodeId": "1778594251042",
     "description": "Bedroom-organization episodes covering pillowcases, hangers, and folded laundry. The 30 s preview is sliced from 263–293 s of episode 1778594251042 where the operator removes a short-sleeve shirt and a long-sleeve shirt from hangers and arranges them on the bed. 23 sub-tasks across the full 488 s capture · ZED2i head + dual wrist + 40 finger joints + end-effector trajectories."
-  },
-  {
-    "id": "ds_factory_024_packaging",
-    "title": "Factory_024 · Manual packaging line",
-    "task": "manual packaging",
-    "sceneCategory": "factory",
-    "scene": "Manufacturing line · packaging station",
-    "hours": 312,
-    "episodes": 104,
-    "sensors": ["chest_cam"],
-    "qualityScore": 4.3,
-    "pricePerHour": 9,
-    "format": "standard",
-    "previewVideo": "/samples/episodes/1778330002413/head.mp4",
-    "description": "Strap-mounted egocentric video bundle from 12 anonymized factory operators across a packaging line. 1080p · H.265 · per-chunk metadata sidecar JSON. Source format for current production captures."
   }
 ]

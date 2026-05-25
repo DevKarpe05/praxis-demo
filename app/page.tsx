@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Boxes, Cpu, Hand, Database } from "lucide-react";
+import { ArrowRight, Boxes, Cpu, Hand } from "lucide-react";
 import { PERSONA_ORDER, PERSONAS, type PersonaId } from "@/lib/personas";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/FadeIn";
 import { LastVisitedTag } from "@/components/LastVisitedTag";
@@ -10,7 +10,6 @@ export default function Landing() {
       <section className="mx-auto max-w-[1400px] px-6 pt-20 pb-16">
         <div className="grid grid-cols-12 gap-10 items-start">
           <FadeIn className="col-span-12 lg:col-span-7" delay={0.05}>
-            <div className="tag tag-accent mb-6">Praxis Robotics — investor demo</div>
             <h1 className="text-5xl md:text-6xl font-semibold tracking-tight leading-[1.04]">
               Every workplace,
               <br />a robotics data vendor.
@@ -37,12 +36,6 @@ export default function Landing() {
                   </Link>
                 );
               })}
-            </div>
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-xs text-[color:var(--color-text-muted)]">
-              <Metric label="Workers" value="500+" />
-              <Metric label="Hours daily capacity" value="1,000+" />
-              <Metric label="Quality (1st contract)" value="86%" />
-              <Metric label="Gross margin" value="65%" />
             </div>
           </FadeIn>
 
@@ -124,41 +117,7 @@ export default function Landing() {
             />
           </StaggerItem>
         </Stagger>
-
-        <FadeIn className="mt-16 card p-6" delay={0.45}>
-          <div className="flex items-start gap-3">
-            <Database className="h-5 w-5 text-[color:var(--color-accent)] mt-0.5" />
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--color-text-dim)] font-medium">
-                Behind this demo
-              </div>
-              <div className="mt-2 text-sm text-[color:var(--color-text-muted)] leading-relaxed">
-                Every panel in this demo plays a real Praxis-format episode —{" "}
-                <span className="text-[color:var(--color-text)] mono">
-                  Data_1778330002413_RH_FLU.hdf5
-                </span>{" "}
-                — decoded directly from a ZED2i + dual-wrist + 40-finger-joint
-                capture. The 6-stage pipeline animation, hand skeleton
-                visualization, sub-task segmentation, and VLA triplet output
-                are all derived from the actual sensor data, not mocked.
-              </div>
-            </div>
-          </div>
-        </FadeIn>
       </section>
-    </div>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <div className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--color-text-dim)] font-medium">
-        {label}
-      </div>
-      <div className="mt-0.5 text-xl font-semibold tabular-nums text-[color:var(--color-text)]">
-        {value}
-      </div>
     </div>
   );
 }
