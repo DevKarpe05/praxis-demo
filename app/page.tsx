@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, Boxes, Cpu, Hand, Database } from "lucide-react";
-import { PERSONA_ORDER, PERSONAS } from "@/lib/personas";
+import { PERSONA_ORDER, PERSONAS, type PersonaId } from "@/lib/personas";
 import { FadeIn, Stagger, StaggerItem } from "@/components/ui/FadeIn";
+import { LastVisitedTag } from "@/components/LastVisitedTag";
 
 export default function Landing() {
   return (
@@ -91,6 +92,7 @@ export default function Landing() {
         >
           <StaggerItem>
             <PillarCard
+              persona="factory"
               icon={<Boxes className="h-5 w-5" />}
               tag="01 · Capture"
               title="Factory uploads"
@@ -101,6 +103,7 @@ export default function Landing() {
           </StaggerItem>
           <StaggerItem>
             <PillarCard
+              persona="ops"
               icon={<Cpu className="h-5 w-5" />}
               tag="02 · Process"
               title="Praxis Ops"
@@ -111,6 +114,7 @@ export default function Landing() {
           </StaggerItem>
           <StaggerItem>
             <PillarCard
+              persona="lab"
               icon={<Hand className="h-5 w-5" />}
               tag="03 · Sell"
               title="Robotics Lab"
@@ -173,6 +177,7 @@ function SpecCell({ label, value }: { label: string; value: string }) {
 }
 
 function PillarCard({
+  persona,
   icon,
   tag,
   title,
@@ -180,6 +185,7 @@ function PillarCard({
   href,
   cta,
 }: {
+  persona: PersonaId;
   icon: React.ReactNode;
   tag: string;
   title: string;
@@ -188,7 +194,10 @@ function PillarCard({
   cta: string;
 }) {
   return (
-    <Link href={href} className="card p-5 card-hover block group">
+    <Link href={href} className="card p-5 card-hover block group relative">
+      <div className="absolute top-3 right-3">
+        <LastVisitedTag persona={persona} />
+      </div>
       <div className="flex items-center gap-2 text-[color:var(--color-accent)]">
         {icon}
         <span className="text-[11px] tracking-[0.18em] uppercase font-medium">

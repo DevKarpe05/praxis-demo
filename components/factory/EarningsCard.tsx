@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Coins, ArrowUpRight } from "lucide-react";
+import { Coins, ArrowUpRight, ArrowRight } from "lucide-react";
 import { useBonus } from "@/lib/bonus";
 import type { Pricing } from "@/lib/data";
 
@@ -81,6 +82,13 @@ export function EarningsCard({
             </motion.div>
           )}
         </AnimatePresence>
+        <Link
+          href="/factory/earnings"
+          className="mt-4 inline-flex items-center gap-1 text-xs text-[color:var(--color-accent)] hover:text-[color:var(--color-text)] transition-colors"
+        >
+          View earnings
+          <ArrowRight className="h-3 w-3" />
+        </Link>
       </div>
     </div>
   );

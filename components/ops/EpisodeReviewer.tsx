@@ -9,7 +9,10 @@ import { PlayerProvider } from "@/components/player/PlayerContext";
 import { InstructionTrack } from "@/components/player/InstructionTrack";
 import { SubTaskTimeline } from "@/components/player/SubTaskTimeline";
 import { TrajectoryPanel } from "@/components/player/TrajectoryPanel";
-import { HandSkeleton } from "@/components/player/HandSkeletonOverlay";
+import {
+  HandSkeleton,
+  HandSkeletonWristOverlay,
+} from "@/components/player/HandSkeletonOverlay";
 import { IntrinsicsPanel } from "@/components/player/IntrinsicsPanel";
 import type {
   CameraData,
@@ -42,7 +45,15 @@ export function EpisodeReviewer({
 
         <div className="mt-5 grid grid-cols-12 gap-5">
           <div className="col-span-12 xl:col-span-8 space-y-4">
-            <MultiViewPlayer videos={meta.videos} />
+            <MultiViewPlayer
+              videos={meta.videos}
+              wristLeftOverlay={
+                <HandSkeletonWristOverlay tracks={tracks} hand="left" />
+              }
+              wristRightOverlay={
+                <HandSkeletonWristOverlay tracks={tracks} hand="right" />
+              }
+            />
             <SubTaskTimeline
               subtasks={subtasks}
               duration={meta.slice.durationSec}

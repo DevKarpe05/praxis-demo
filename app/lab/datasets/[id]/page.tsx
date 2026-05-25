@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { DatasetDetail } from "@/components/lab/DatasetDetail";
 import {
   loadDatasets,
+  loadEpisodeCamera,
   loadEpisodeMeta,
   loadEpisodeSubtasks,
   loadEpisodeTracks,
@@ -24,12 +25,14 @@ export default async function DatasetPage({
   let meta = null;
   let tracks = null;
   let subtasks = null;
+  let camera = null;
   if (dataset.episodeId) {
     try {
-      [meta, tracks, subtasks] = await Promise.all([
+      [meta, tracks, subtasks, camera] = await Promise.all([
         loadEpisodeMeta(dataset.episodeId),
         loadEpisodeTracks(dataset.episodeId),
         loadEpisodeSubtasks(dataset.episodeId),
+        loadEpisodeCamera(dataset.episodeId).catch(() => null),
       ]);
     } catch {
       // optional — fallback to preview-only
@@ -45,6 +48,7 @@ export default async function DatasetPage({
       meta={meta}
       tracks={tracks}
       subtasks={subtasks}
+      camera={camera}
       factoryShareUsd={factoryShareUsd}
     />
   );

@@ -1,12 +1,18 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PERSONA_ORDER, PERSONAS, personaFromPath } from "@/lib/personas";
+import { rememberLastPersona } from "@/lib/persona-memory";
 
 export function PersonaSwitcher() {
   const pathname = usePathname() ?? "/";
   const active = personaFromPath(pathname);
+
+  useEffect(() => {
+    if (active) rememberLastPersona(active);
+  }, [active]);
 
   return (
     <nav

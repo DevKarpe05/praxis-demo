@@ -1,5 +1,21 @@
 import { Battery, Wifi } from "lucide-react";
 import type { Device } from "@/lib/data";
+import { SensorBadge } from "@/components/SensorBadge";
+
+const DEVICE_TO_SENSOR: Record<string, string> = {
+  zed2i: "zed2i",
+  wrist_l: "wrist_l",
+  wrist_r: "wrist_r",
+  finger: "finger_joints",
+  strap: "chest_cam",
+};
+
+function deviceToSensorKey(deviceId: string): string | null {
+  for (const [prefix, key] of Object.entries(DEVICE_TO_SENSOR)) {
+    if (deviceId.startsWith(prefix)) return key;
+  }
+  return null;
+}
 
 export function FleetCard({ devices }: { devices: Device[] }) {
   const totalOnline = devices.reduce((a, d) => a + d.online, 0);
@@ -23,31 +39,38 @@ export function FleetCard({ devices }: { devices: Device[] }) {
         </div>
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {devices.map((d) => (
-          <div
-            key={d.id}
-            className="flex items-center justify-between rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface-2)] px-3 py-2"
-          >
-            <div className="min-w-0">
-              <div className="text-xs font-medium truncate">{d.type}</div>
-              <div className="mono text-[10px] text-[color:var(--color-text-dim)] truncate">
-                {d.spec}
+        {devices.map((d) => {
+          const sensorKey = deviceToSensorKey(d.id);
+          return (
+            <div
+              key={d.id}
+              className="flex items-center justify-between rounded-md border border-[color:var(--color-border)] bg-[color:var(--color-surface-2)] px-3 py-2"
+            >
+              <div className="min-w-0">
+                <div className="text-xs font-medium truncate">{d.type}</div>
+                <div className="mt-1 flex items-center gap-1.5 mono text-[10px] text-[color:var(--color-text-dim)]">
+                  {sensorKey ? (
+                    <SensorBadge sensor={sensorKey} active />
+                  ) : (
+                    <span className="truncate">{d.spec}</span>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 ml-3 flex-none">
+                <div className="flex items-center gap-1 text-[10px] text-[color:var(--color-text-muted)]">
+                  <Wifi className="h-3 w-3" />
+                  <span className="mono">
+                    {d.online}/{d.total}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 text-[10px] text-[color:var(--color-text-muted)]">
+                  <Battery className="h-3 w-3" />
+                  <span className="mono">{d.battery}%</span>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3 ml-3">
-              <div className="flex items-center gap-1 text-[10px] text-[color:var(--color-text-muted)]">
-                <Wifi className="h-3 w-3" />
-                <span className="mono">
-                  {d.online}/{d.total}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-[10px] text-[color:var(--color-text-muted)]">
-                <Battery className="h-3 w-3" />
-                <span className="mono">{d.battery}%</span>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

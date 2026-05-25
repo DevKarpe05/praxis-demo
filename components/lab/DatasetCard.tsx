@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { Star, ArrowRight } from "lucide-react";
 import type { DatasetCard as DatasetCardType } from "@/lib/types";
+import { SensorBadge } from "@/components/SensorBadge";
 
 export function DatasetCard({ dataset }: { dataset: DatasetCardType }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -69,12 +70,7 @@ export function DatasetCard({ dataset }: { dataset: DatasetCardType }) {
         </h3>
         <div className="mt-3 flex flex-wrap gap-1">
           {dataset.sensors.slice(0, 4).map((s) => (
-            <span
-              key={s}
-              className="tag text-[10px] mono"
-            >
-              {s}
-            </span>
+            <SensorBadge key={s} sensor={s} showFreq={false} />
           ))}
           {dataset.sensors.length > 4 && (
             <span className="tag text-[10px]">+{dataset.sensors.length - 4}</span>

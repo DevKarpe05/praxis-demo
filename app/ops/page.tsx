@@ -37,9 +37,15 @@ export default async function OpsDashboard() {
     },
     {
       id: "pose",
-      label: "Pose extracted",
+      label: "Pose",
       description: "skeletons + trajectories",
       cards: [sibling("pose_1", 3)],
+    },
+    {
+      id: "instruction",
+      label: "Instruction",
+      description: "VLA instruction + sub-tasks",
+      cards: [sibling("instr_1", 4), sibling("instr_2", 5)],
     },
     {
       id: "qa",

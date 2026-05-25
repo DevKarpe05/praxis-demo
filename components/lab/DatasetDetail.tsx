@@ -6,10 +6,16 @@ import { MultiViewPlayer } from "@/components/player/MultiViewPlayer";
 import { PlayerProvider } from "@/components/player/PlayerContext";
 import { InstructionTrack } from "@/components/player/InstructionTrack";
 import { SubTaskTimeline } from "@/components/player/SubTaskTimeline";
-import { HandSkeleton } from "@/components/player/HandSkeletonOverlay";
+import {
+  HandSkeleton,
+  HandSkeletonWristOverlay,
+} from "@/components/player/HandSkeletonOverlay";
+import { IntrinsicsPanel } from "@/components/player/IntrinsicsPanel";
 import { TrajectoryPanel } from "@/components/player/TrajectoryPanel";
 import { CheckoutPanel } from "./CheckoutPanel";
+import { SensorBadge } from "@/components/SensorBadge";
 import type {
+  CameraData,
   DatasetCard,
   EpisodeMeta,
   SubtaskSegment,
@@ -21,6 +27,7 @@ export interface DatasetDetailProps {
   meta?: EpisodeMeta | null;
   tracks?: TracksData | null;
   subtasks?: SubtaskSegment[] | null;
+  camera?: CameraData | null;
   factoryShareUsd: number;
 }
 
@@ -29,6 +36,7 @@ export function DatasetDetail({
   meta,
   tracks,
   subtasks,
+  camera,
   factoryShareUsd,
 }: DatasetDetailProps) {
   const hasEpisode = !!meta && !!tracks && !!subtasks;
@@ -58,6 +66,11 @@ export function DatasetDetail({
           <div className="mt-1 text-sm text-[color:var(--color-text-muted)] max-w-2xl">
             {dataset.description}
           </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {dataset.sensors.map((s) => (
+              <SensorBadge key={s} sensor={s} size="md" />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -65,11 +78,20 @@ export function DatasetDetail({
         <div className="col-span-12 xl:col-span-8 space-y-4">
           {hasEpisode ? (
             <PlayerProvider initialDuration={meta.slice.durationSec}>
-              <MultiViewPlayer videos={meta.videos} />
+              <MultiViewPlayer
+                videos={meta.videos}
+                wristLeftOverlay={
+                  <HandSkeletonWristOverlay tracks={tracks} hand="left" />
+                }
+                wristRightOverlay={
+                  <HandSkeletonWristOverlay tracks={tracks} hand="right" />
+                }
+              />
               <SubTaskTimeline
                 subtasks={subtasks}
                 duration={meta.slice.durationSec}
               />
+              {camera && <IntrinsicsPanel camera={camera} />}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <InstructionTrack task={meta.task} subtasks={subtasks} />
                 <TripletCard meta={meta} />
