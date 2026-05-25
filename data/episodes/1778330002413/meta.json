@@ -1,0 +1,25 @@
+{
+  "episodeId": "1778330002413",
+  "task": "tidy shoe cabinet",
+  "sceneCategory": "home",
+  "coordinateFrame": "RH_FLU",
+  "fps": 30,
+  "slice": {
+    "startSec": 0.0,
+    "durationSec": 30.0,
+    "frameCount": 900
+  },
+  "fullEpisode": {
+    "durationSec": 630.729,
+    "frameCount": 18922,
+    "subtaskCount": 28
+  },
+  "videos": {
+    "head": "/samples/episodes/1778330002413/head.mp4",
+    "wristLeft": "/samples/episodes/1778330002413/wrist_left.mp4",
+    "wristRight": "/samples/episodes/1778330002413/wrist_right.mp4"
+  },
+  "intrinsics": "/samples/episodes/1778330002413/camera.json",
+  "tracks": "/data/episodes/1778330002413/tracks.json",
+  "subtasks": "/data/episodes/1778330002413/subtasks.json"
+}

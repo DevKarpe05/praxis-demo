@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #07080a;
+  --color-surface: #0f1115;
+  --color-surface-2: #15181f;
+  --color-border: #232733;
+  --color-border-strong: #343a4a;
+  --color-text: #e8eaee;
+  --color-text-muted: #9aa1ad;
+  --color-text-dim: #5d6470;
+  --color-accent: #f4a13b;
+  --color-accent-soft: #2a1e10;
+  --color-success: #4ade80;
+  --color-warn: #fbbf24;
+  --color-info: #60a5fa;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Menlo", monospace;
+}
+
+@layer base {
+  html, body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: rgba(244, 161, 59, 0.35);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+  }
+  .card-hover {
+    transition: border-color 200ms, transform 200ms;
+  }
+  .card-hover:hover {
+    border-color: var(--color-border-strong);
+  }
+  .mono {
+    font-family: var(--font-mono);
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    background-color: var(--color-surface-2);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+  .tag-accent {
+    background-color: var(--color-accent-soft);
+    color: var(--color-accent);
+    border-color: rgba(244, 161, 59, 0.3);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 150ms, border-color 150ms, color 150ms;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #14110a;
+    border: 1px solid var(--color-accent);
+  }
+  .btn-primary:hover {
+    background-color: #f6b35a;
+  }
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface);
+  }
+}
+
+/* Subtle grid texture for backgrounds */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2e39;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3f4d;
+}
