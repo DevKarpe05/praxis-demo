@@ -2,42 +2,35 @@
 
 import { useEffect, useRef } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
-import { PlayerProvider, usePlayerControls, usePlayerState } from "./PlayerContext";
+import {
+  PlayerProvider,
+  usePlayerControls,
+  usePlayerRefs,
+  usePlayerState,
+} from "./PlayerContext";
 
 export interface MultiViewPlayerProps {
   videos: { head: string; wristLeft: string; wristRight: string };
-  duration?: number;
   /**
-   * Overlay slots rendered absolutely over each view. Use `usePlayerState` inside
-   * children to subscribe to currentTime.
+   * Overlay slots rendered absolutely over each view.
    */
   headOverlay?: React.ReactNode;
   wristLeftOverlay?: React.ReactNode;
   wristRightOverlay?: React.ReactNode;
-  /**
-   * Optional content rendered next to/below the player inside the same provider.
-   */
-  children?: React.ReactNode;
 }
 
 export function MultiViewPlayer({
   videos,
-  duration,
   headOverlay,
   wristLeftOverlay,
   wristRightOverlay,
-  children,
 }: MultiViewPlayerProps) {
-  const headRef = useRef<HTMLVideoElement>(null);
-  const wristLRef = useRef<HTMLVideoElement>(null);
-  const wristRRef = useRef<HTMLVideoElement>(null);
+  const { masterRef, slaveRefs } = usePlayerRefs();
+  const [wristLRef, wristRRef] = slaveRefs;
+  const headRef = masterRef;
 
   return (
-    <PlayerProvider
-      masterRef={headRef}
-      slaveRefs={[wristLRef, wristRRef]}
-      initialDuration={duration}
-    >
+    <>
       <div className="grid grid-cols-12 gap-3">
         <div className="col-span-12 lg:col-span-9 relative overflow-hidden rounded-xl border border-[color:var(--color-border)] bg-black aspect-video">
           <video
@@ -93,9 +86,7 @@ export function MultiViewPlayer({
       </div>
 
       <Transport />
-
-      {children}
-    </PlayerProvider>
+    </>
   );
 }
 

@@ -1,0 +1,15 @@
+{
+  "factoryRates": {
+    "rawPerHour": 6,
+    "annotationBonusPerHour": 4,
+    "totalPerHour": 10,
+    "currency": "USD",
+    "explainer": "Praxis pays factories for raw capture, plus an annotation bonus once data passes QA/QC and is released to a buyer."
+  },
+  "marketplaceRates": {
+    "premiumPerHour": 18,
+    "standardPerHour": 9,
+    "currency": "USD",
+    "explainer": "Buyers license datasets by the captured hour. Premium tier includes ZED2i + dual wrist + finger joints + end-effector trajectories."
+  }
+}

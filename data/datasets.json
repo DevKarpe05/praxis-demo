@@ -1,0 +1,49 @@
+[
+  {
+    "id": "ds_home_tidy_shoe_cabinet",
+    "title": "Home · Tidy shoe cabinet",
+    "task": "tidy shoe cabinet",
+    "sceneCategory": "home",
+    "scene": "Residential entryway · shoe cabinet, drawer, rag",
+    "hours": 24,
+    "episodes": 142,
+    "sensors": ["zed2i", "wrist_l", "wrist_r", "finger_joints", "end_effector"],
+    "qualityScore": 4.7,
+    "pricePerHour": 18,
+    "format": "premium",
+    "previewVideo": "/samples/episodes/1778330002413/head.mp4",
+    "episodeId": "1778330002413",
+    "description": "142 multi-modal home episodes captured across 6 residential environments. Preview clip is a 30 s slice of episode 1778330002413 — an operator opens a shoe-cabinet drawer, repositions four pairs of shoes by colour, and wipes the cabinet. 28 sub-tasks · ZED2i head + dual wrist + 40 finger joints + end-effector pose."
+  },
+  {
+    "id": "ds_home_organize_drawer_release_pending",
+    "title": "Home · Organize drawer (E2)",
+    "task": "organize drawer",
+    "sceneCategory": "home",
+    "scene": "Residential bedroom · drawer organization",
+    "hours": 18,
+    "episodes": 96,
+    "sensors": ["zed2i", "wrist_l", "wrist_r", "finger_joints", "end_effector", "depth_svo2"],
+    "qualityScore": 4.8,
+    "pricePerHour": 22,
+    "format": "premium",
+    "previewVideo": "/samples/episodes/1778330002413/head.mp4",
+    "episodeId": "1778589627389",
+    "description": "Second premium-format collection. Each episode includes the full ZED2i SVO2 (RGB + depth + point cloud) alongside the standard bundle. Drawer-and-bin organization tasks across 4 bedroom layouts."
+  },
+  {
+    "id": "ds_factory_024_packaging",
+    "title": "Factory_024 · Manual packaging line",
+    "task": "manual packaging",
+    "sceneCategory": "factory",
+    "scene": "Manufacturing line · packaging station",
+    "hours": 312,
+    "episodes": 104,
+    "sensors": ["chest_cam"],
+    "qualityScore": 4.3,
+    "pricePerHour": 9,
+    "format": "standard",
+    "previewVideo": "/samples/episodes/1778330002413/head.mp4",
+    "description": "Strap-mounted egocentric video bundle from 12 anonymized factory operators across a packaging line. 1080p · H.265 · per-chunk metadata sidecar JSON. Source format for current production captures."
+  }
+]

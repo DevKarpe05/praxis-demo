@@ -1,0 +1,38 @@
+[
+  {
+    "id": "operator_001",
+    "label": "Operator 001",
+    "status": "active",
+    "hoursThisMonth": 38.4,
+    "totalEpisodes": 142,
+    "averageQuality": 4.7,
+    "currentDevice": "ZED2i + dual wrist"
+  },
+  {
+    "id": "operator_002",
+    "label": "Operator 002",
+    "status": "idle",
+    "hoursThisMonth": 27.1,
+    "totalEpisodes": 96,
+    "averageQuality": 4.5,
+    "currentDevice": "Strap chest-cam"
+  },
+  {
+    "id": "operator_003",
+    "label": "Operator 003",
+    "status": "active",
+    "hoursThisMonth": 31.8,
+    "totalEpisodes": 118,
+    "averageQuality": 4.6,
+    "currentDevice": "ZED2i + dual wrist"
+  },
+  {
+    "id": "operator_004",
+    "label": "Operator 004",
+    "status": "offline",
+    "hoursThisMonth": 19.2,
+    "totalEpisodes": 71,
+    "averageQuality": 4.4,
+    "currentDevice": "Strap chest-cam"
+  }
+]

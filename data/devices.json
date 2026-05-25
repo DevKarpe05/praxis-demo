@@ -1,0 +1,42 @@
+[
+  {
+    "id": "zed2i_a01",
+    "type": "ZED2i Head Cam",
+    "spec": "1280×720 · 30fps · RGB + depth + point cloud",
+    "online": 3,
+    "total": 4,
+    "battery": 78
+  },
+  {
+    "id": "wrist_l_a01",
+    "type": "Wrist Cam · Left",
+    "spec": "720p · 30fps · USB-C",
+    "online": 3,
+    "total": 4,
+    "battery": 81
+  },
+  {
+    "id": "wrist_r_a01",
+    "type": "Wrist Cam · Right",
+    "spec": "720p · 30fps · USB-C",
+    "online": 3,
+    "total": 4,
+    "battery": 82
+  },
+  {
+    "id": "finger_glove_a01",
+    "type": "Finger-joint Glove",
+    "spec": "20-joint pose · 30Hz · BT",
+    "online": 2,
+    "total": 4,
+    "battery": 64
+  },
+  {
+    "id": "strap_phone_a01",
+    "type": "Strap-mount Phone Cam",
+    "spec": "1920×1080 · 30fps · H.265",
+    "online": 12,
+    "total": 14,
+    "battery": 71
+  }
+]

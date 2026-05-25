@@ -8,6 +8,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type RefObject,
 } from "react";
 
 export interface PlayerState {
@@ -24,24 +25,35 @@ export interface PlayerControls {
   setPlaybackRate: (r: number) => void;
 }
 
+export interface PlayerRefs {
+  masterRef: RefObject<HTMLVideoElement | null>;
+  slaveRefs: RefObject<HTMLVideoElement | null>[];
+}
+
 const PlayerStateCtx = createContext<PlayerState | null>(null);
 const PlayerControlsCtx = createContext<PlayerControls | null>(null);
+const PlayerRefsCtx = createContext<PlayerRefs | null>(null);
 
 /**
- * Provider that synchronizes one master video with N slave videos.
+ * Top-level provider. Owns refs for one master video + N slave videos.
  * The master drives currentTime; slaves are coerced to match on rAF.
  */
 export function PlayerProvider({
-  masterRef,
-  slaveRefs,
-  children,
+  slaveCount = 2,
   initialDuration,
+  children,
 }: {
-  masterRef: React.RefObject<HTMLVideoElement | null>;
-  slaveRefs: React.RefObject<HTMLVideoElement | null>[];
-  children: React.ReactNode;
+  slaveCount?: number;
   initialDuration?: number;
+  children: React.ReactNode;
 }) {
+  const masterRef = useRef<HTMLVideoElement | null>(null);
+  const slaveARef = useRef<HTMLVideoElement | null>(null);
+  const slaveBRef = useRef<HTMLVideoElement | null>(null);
+  const slaveCRef = useRef<HTMLVideoElement | null>(null);
+  const allSlaves = [slaveARef, slaveBRef, slaveCRef];
+  const slaveRefs = allSlaves.slice(0, slaveCount);
+
   const [state, setState] = useState<PlayerState>({
     currentTime: 0,
     duration: initialDuration ?? 0,
@@ -63,7 +75,7 @@ export function PlayerProvider({
         s.play().catch(() => {});
       }
     }
-  }, [masterRef, slaveRefs]);
+  }, [slaveRefs]);
 
   useEffect(() => {
     const m = masterRef.current;
@@ -90,18 +102,21 @@ export function PlayerProvider({
 
     let lastSyncTime = 0;
     const tick = () => {
-      if (m.paused) {
+      const cur = masterRef.current;
+      if (!cur) {
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
-      setState((prev) =>
-        prev.currentTime === m.currentTime
-          ? prev
-          : { ...prev, currentTime: m.currentTime },
-      );
-      if (m.currentTime - lastSyncTime > 0.1) {
-        sync();
-        lastSyncTime = m.currentTime;
+      if (!cur.paused) {
+        setState((prev) =>
+          prev.currentTime === cur.currentTime
+            ? prev
+            : { ...prev, currentTime: cur.currentTime },
+        );
+        if (cur.currentTime - lastSyncTime > 0.1) {
+          sync();
+          lastSyncTime = cur.currentTime;
+        }
       }
       rafRef.current = requestAnimationFrame(tick);
     };
@@ -115,14 +130,12 @@ export function PlayerProvider({
       m.removeEventListener("seeked", onSeek);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [masterRef, sync]);
+  }, [sync]);
 
   const controls = useMemo<PlayerControls>(
     () => ({
       play: () => {
-        const m = masterRef.current;
-        if (!m) return;
-        m.play().catch(() => {});
+        masterRef.current?.play().catch(() => {});
       },
       pause: () => {
         masterRef.current?.pause();
@@ -147,15 +160,23 @@ export function PlayerProvider({
         }
       },
     }),
-    [masterRef, slaveRefs],
+    [slaveRefs],
+  );
+
+  const refs = useMemo<PlayerRefs>(
+    () => ({ masterRef, slaveRefs }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   return (
-    <PlayerStateCtx.Provider value={state}>
-      <PlayerControlsCtx.Provider value={controls}>
-        {children}
-      </PlayerControlsCtx.Provider>
-    </PlayerStateCtx.Provider>
+    <PlayerRefsCtx.Provider value={refs}>
+      <PlayerStateCtx.Provider value={state}>
+        <PlayerControlsCtx.Provider value={controls}>
+          {children}
+        </PlayerControlsCtx.Provider>
+      </PlayerStateCtx.Provider>
+    </PlayerRefsCtx.Provider>
   );
 }
 
@@ -168,5 +189,11 @@ export function usePlayerState(): PlayerState {
 export function usePlayerControls(): PlayerControls {
   const ctx = useContext(PlayerControlsCtx);
   if (!ctx) throw new Error("usePlayerControls must be inside <PlayerProvider>");
+  return ctx;
+}
+
+export function usePlayerRefs(): PlayerRefs {
+  const ctx = useContext(PlayerRefsCtx);
+  if (!ctx) throw new Error("usePlayerRefs must be inside <PlayerProvider>");
   return ctx;
 }

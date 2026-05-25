@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X, Tag, Database } from "lucide-react";
+import Link from "next/link";
+import { Check, X, Tag, Database, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MultiViewPlayer } from "@/components/player/MultiViewPlayer";
+import { PlayerProvider } from "@/components/player/PlayerContext";
 import { InstructionTrack } from "@/components/player/InstructionTrack";
 import { SubTaskTimeline } from "@/components/player/SubTaskTimeline";
 import { TrajectoryPanel } from "@/components/player/TrajectoryPanel";
@@ -34,33 +36,34 @@ export function EpisodeReviewer({
   );
 
   return (
-    <div className="mx-auto max-w-[1400px] px-6 py-6">
-      <Header meta={meta} />
+    <PlayerProvider initialDuration={meta.slice.durationSec}>
+      <div className="mx-auto max-w-[1400px] px-6 py-6">
+        <Header meta={meta} />
 
-      <div className="mt-5 grid grid-cols-12 gap-5">
-        <div className="col-span-12 xl:col-span-8 space-y-4">
-          <MultiViewPlayer
-            videos={meta.videos}
-            duration={meta.slice.durationSec}
-          />
-          <SubTaskTimeline
-            subtasks={subtasks}
-            duration={meta.slice.durationSec}
-          />
-          <TrajectoryPanel tracks={tracks} duration={meta.slice.durationSec} />
-        </div>
+        <div className="mt-5 grid grid-cols-12 gap-5">
+          <div className="col-span-12 xl:col-span-8 space-y-4">
+            <MultiViewPlayer videos={meta.videos} />
+            <SubTaskTimeline
+              subtasks={subtasks}
+              duration={meta.slice.durationSec}
+            />
+            <TrajectoryPanel tracks={tracks} duration={meta.slice.durationSec} />
+          </div>
 
-        <div className="col-span-12 xl:col-span-4 space-y-4">
-          <InstructionTrack task={meta.task} subtasks={subtasks} />
-          <HandSkeleton tracks={tracks} />
-          <IntrinsicsPanel camera={camera} />
-          <DecisionPanel decision={decision} onDecide={setDecision} />
-          <AnimatePresence>
-            {decision === "approved" && <TripletReveal episodeId={meta.episodeId} task={meta.task} />}
-          </AnimatePresence>
+          <div className="col-span-12 xl:col-span-4 space-y-4">
+            <InstructionTrack task={meta.task} subtasks={subtasks} />
+            <HandSkeleton tracks={tracks} />
+            <IntrinsicsPanel camera={camera} />
+            <DecisionPanel decision={decision} onDecide={setDecision} />
+            <AnimatePresence>
+              {decision === "approved" && (
+                <TripletReveal episodeId={meta.episodeId} task={meta.task} />
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-    </div>
+    </PlayerProvider>
   );
 }
 
@@ -68,7 +71,14 @@ function Header({ meta }: { meta: EpisodeMeta }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <div className="flex items-center gap-2 text-[color:var(--color-text-muted)] text-xs">
+        <Link
+          href="/ops"
+          className="inline-flex items-center gap-1.5 text-xs text-[color:var(--color-text-muted)] hover:text-[color:var(--color-text)]"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to pipeline
+        </Link>
+        <div className="mt-2 flex items-center gap-2 text-[color:var(--color-text-muted)] text-xs">
           <span className="tag">QA Reviewer</span>
           <span className="mono">episode {meta.episodeId}</span>
           <span className="opacity-60">·</span>
