@@ -11,8 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Praxis Robotics — Data Platform",
-  description:
-    "Praxis turns real-world operations into training infrastructure for AI. Egocentric capture, multi-modal QA, dataset marketplace.",
+  description: "Praxis enables businesses to monetize their operational data.",
 };
 
 export default function RootLayout({

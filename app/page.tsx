@@ -13,9 +13,13 @@ export default function Landing() {
               Every business,
               <br />a data partner.
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-[color:var(--color-text-muted)] max-w-2xl">
-              Praxis turns real-world operations into training infrastructure
-              for AI.
+            <p className="mt-6 text-lg md:text-xl text-[color:var(--color-text)] max-w-2xl">
+              Praxis enables businesses to monetize their operational data.
+            </p>
+            <p className="mt-3 text-base md:text-lg text-[color:var(--color-text-muted)] max-w-2xl">
+              We deploy capture, sensing, and data infrastructure across
+              real-world environments, transforming everyday workflows into
+              structured training data for frontier AI systems.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-2">
               {PERSONA_ORDER.map((id) => {
